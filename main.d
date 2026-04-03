@@ -1,8 +1,10 @@
 main.o: main.c
 main.o: C:\Keil\ARM\Inc\Philips\lpc21xx.h
+main.o: C:\Keil\ARM\RV31\Inc\string.h
 main.o: lcd.h
 main.o: datatypes.h
 main.o: delay.h
 main.o: i2c_operation.h
 main.o: i2c_internal.h
 main.o: reg_macro.h
+main.o: keypad.h
