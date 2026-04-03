@@ -1,0 +1,14 @@
+# Keil generated folders
+Objects/
+Listings/
+
+# Build output files
+*.axf
+*.hex
+*.map
+*.lst
+*.bak
+*.dep
+*.uvgui*
+*.uvopt*
+*.ini
