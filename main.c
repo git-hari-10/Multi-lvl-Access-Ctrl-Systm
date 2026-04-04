@@ -14,6 +14,7 @@ void STORE_PASS(u8*);
 void GET_PASS(void);
 void ENTER_PASS(void);
 void COMPARE_PASS(void);
+void OTP(void);
 
 int main()
 {
@@ -58,9 +59,9 @@ void ENTER_PASS()
 {
 	i32 i,addr;
 	lcd_cmd(0x01);
-	lcd_cmd(0x80);lcd_str(" ================== ");
+	lcd_cmd(0x80);lcd_str("====================");
 	lcd_cmd(0xC0);lcd_str("   ENTER PASSWORD   ");
-	lcd_cmd(0xD4);lcd_str(" ================== ");
+	lcd_cmd(0xD4);lcd_str("====================");
 	for(i=0,addr=0x9C;i<4;i++)
 	{
 		e[i] = keypress();
@@ -73,13 +74,16 @@ void ENTER_PASS()
 
 void TOPIC()
 {
-	lcd_cmd(0x80); lcd_str("|-  MULTI  LEVEL  -|");
-	lcd_cmd(0xC0); lcd_str("|- SECURITY BASED -|");
-	lcd_cmd(0x94); lcd_str("|- ACCESS CONTROL -|");
-	lcd_cmd(0xD4); lcd_str("|-     SYSTEM     -|");
-
-	
-	delay_s(4);
+	i32 i;
+	lcd_cmd(0x80); lcd_str("MULTI LEVEL SECURITY");
+	lcd_cmd(0xC0); lcd_str("   ACCESS CONTROL   ");
+	lcd_cmd(0x94); lcd_str("       SYSTEM       ");
+	lcd_cmd(0xD4);
+				for(i=0;i<20;i++)
+				{
+					lcd_write('~');
+					delay_ms(200);
+				}
 }
 
 /* ----- COMPARE PASSWORD ----- */
@@ -95,26 +99,27 @@ void COMPARE_PASS()
 				lcd_cmd(0x94);
 				for(i=0;i<20;i++)
 				{
-					lcd_write('*');
-					delay_ms(150);
+					lcd_write('-');
+					delay_ms(100);
 				}
+				OTP();
 			}
 			else
 			{
 				attempts++;
 				
 				lcd_cmd(0x01);
-				lcd_cmd(0x80);lcd_str(" ================== ");
+				lcd_cmd(0x80);lcd_str("====================");
 				lcd_cmd(0xC0);lcd_str("      IN-VALID      ");
 				lcd_cmd(0x94);lcd_str("      PASSWORD      ");
-				lcd_cmd(0xD4);lcd_str(" ================== ");
+				lcd_cmd(0xD4);lcd_str("====================");
 				
-				delay_s(3);lcd_cmd(0x01);
+				delay_ms(1200);lcd_cmd(0x01);
 				
 				lcd_cmd(0xC0);lcd_str("   ATTEMPTS LEFT:   ");
 				lcd_cmd(0x9D);lcd_write('0');lcd_write('0' + (3 - attempts));  
 
-        delay_s(2);
+        delay_ms(1200);
 
         // LOCK CONDITION
         if(attempts >= 3)
@@ -128,5 +133,23 @@ void COMPARE_PASS()
             while(1);   // permanent lock
         }
 			}
+}
+
+void OTP()
+{
+	lcd_cmd(0x01);
+  lcd_cmd(0x80);lcd_str("====================");
+  lcd_cmd(0xC0);lcd_str("   SYSTEM STATUS    ");
+  lcd_cmd(0x94);lcd_str("      UNLOCKED      ");
+  lcd_cmd(0xD4);lcd_str("====================");
+	
+	/*
+	lcd_cmd(0x01);
+  lcd_cmd(0x80);lcd_str(" ****************** ");
+  lcd_cmd(0xC0);lcd_str("   SYSTEM STATUS    ");
+  lcd_cmd(0x94);lcd_str("      UNLOCKED      ");
+  lcd_cmd(0xD4);lcd_str(" ****************** ");
+	while(1);
+	*/
 }
 

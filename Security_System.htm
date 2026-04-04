@@ -3,7 +3,7 @@
 <title>Static Call Graph - [C:\Users\haris\Documents\ARM\Embedded C\Main_Project\Security_System.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image C:\Users\haris\Documents\ARM\Embedded C\Main_Project\Security_System.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 4.1 [Build 894]: Last Updated: Fri Apr 03 22:39:40 2026
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 4.1 [Build 894]: Last Updated: Sat Apr 04 11:57:00 2026
 <BR><P>
 <H3>Maximum Stack Usage =         28 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -44,6 +44,7 @@ Function Pointers
  <LI><a href="#[4]">SWI_Handler</a> from startup.o(RESET) referenced from startup.o(RESET)
  <LI><a href="#[3]">Undef_Handler</a> from startup.o(RESET) referenced from startup.o(RESET)
  <LI><a href="#[b]">__main</a> from __main.o(!!!main) referenced from startup.o(RESET)
+ <LI><a href="#[11]">_fp_init</a> from fpinit.o(x$fpl$fpinit) referenced from main.o(.text)
  <LI><a href="#[a]">main</a> from main.o(.text) referenced from rtentry2.o(.ARM.Collect$$rtentry$$0000000D)
 </UL>
 <P>
@@ -186,21 +187,19 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[13]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__user_setup_stackheap
 </UL>
 
-<P><STRONG><a name="[2d]"></a>delay_s</STRONG> (ARM, 64 bytes, Stack size 0 bytes, main.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TOPIC
-<LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;COMPARE_PASS
-</UL>
+<P><STRONG><a name="[58]"></a>delay_s</STRONG> (ARM, 64 bytes, Stack size 0 bytes, main.o(.text), UNUSED)
 
 <P><STRONG><a name="[1c]"></a>delay_ms</STRONG> (ARM, 64 bytes, Stack size 0 bytes, main.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[31]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STORE_PASS
+<LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TOPIC
 <LI><a href="#[2e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GET_PASS
-<LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;COMPARE_PASS
+<LI><a href="#[2c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;COMPARE_PASS
 <LI><a href="#[2a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;keypress
 <LI><a href="#[1e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcd_write
 <LI><a href="#[1b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcd_cmd
 </UL>
 
-<P><STRONG><a name="[58]"></a>delay_us</STRONG> (ARM, 64 bytes, Stack size 0 bytes, main.o(.text), UNUSED)
+<P><STRONG><a name="[59]"></a>delay_us</STRONG> (ARM, 64 bytes, Stack size 0 bytes, main.o(.text), UNUSED)
 
 <P><STRONG><a name="[1b]"></a>lcd_cmd</STRONG> (ARM, 124 bytes, Stack size 4 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = lcd_cmd
@@ -209,7 +208,8 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TOPIC
 <LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ENTER_PASS
-<LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;COMPARE_PASS
+<LI><a href="#[2c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;COMPARE_PASS
+<LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OTP
 <LI><a href="#[1d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcd_init
 </UL>
 
@@ -226,8 +226,9 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
 </UL>
-<BR>[Called By]<UL><LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ENTER_PASS
-<LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;COMPARE_PASS
+<BR>[Called By]<UL><LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TOPIC
+<LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ENTER_PASS
+<LI><a href="#[2c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;COMPARE_PASS
 <LI><a href="#[1f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcd_str
 </UL>
 
@@ -238,7 +239,8 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TOPIC
 <LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ENTER_PASS
-<LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;COMPARE_PASS
+<LI><a href="#[2c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;COMPARE_PASS
+<LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OTP
 </UL>
 
 <P><STRONG><a name="[33]"></a>I2C_init</STRONG> (ARM, 48 bytes, Stack size 0 bytes, main.o(.text))
@@ -325,15 +327,24 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ENTER_PASS
 </UL>
 
-<P><STRONG><a name="[2b]"></a>COMPARE_PASS</STRONG> (ARM, 380 bytes, Stack size 8 bytes, main.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = COMPARE_PASS &rArr; lcd_str &rArr; lcd_write
+<P><STRONG><a name="[2b]"></a>OTP</STRONG> (ARM, 84 bytes, Stack size 4 bytes, main.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = OTP &rArr; lcd_str &rArr; lcd_write
 </UL>
-<BR>[Calls]<UL><LI><a href="#[2c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcmp
+<BR>[Calls]<UL><LI><a href="#[1f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcd_str
+<LI><a href="#[1b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcd_cmd
+</UL>
+<BR>[Called By]<UL><LI><a href="#[2c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;COMPARE_PASS
+</UL>
+
+<P><STRONG><a name="[2c]"></a>COMPARE_PASS</STRONG> (ARM, 664 bytes, Stack size 8 bytes, main.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = COMPARE_PASS &rArr; OTP &rArr; lcd_str &rArr; lcd_write
+</UL>
+<BR>[Calls]<UL><LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcmp
+<LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OTP
 <LI><a href="#[1f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcd_str
 <LI><a href="#[1e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcd_write
 <LI><a href="#[1b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcd_cmd
 <LI><a href="#[1c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
-<LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_s
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -347,7 +358,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[2f]"></a>ENTER_PASS</STRONG> (ARM, 400 bytes, Stack size 12 bytes, main.o(.text))
+<P><STRONG><a name="[2f]"></a>ENTER_PASS</STRONG> (ARM, 144 bytes, Stack size 12 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = ENTER_PASS &rArr; lcd_str &rArr; lcd_write
 </UL>
 <BR>[Calls]<UL><LI><a href="#[2a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;keypress
@@ -358,12 +369,13 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[30]"></a>TOPIC</STRONG> (ARM, 84 bytes, Stack size 4 bytes, main.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = TOPIC &rArr; lcd_str &rArr; lcd_write
+<P><STRONG><a name="[30]"></a>TOPIC</STRONG> (ARM, 104 bytes, Stack size 8 bytes, main.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = TOPIC &rArr; lcd_str &rArr; lcd_write
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcd_str
+<LI><a href="#[1e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcd_write
 <LI><a href="#[1b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcd_cmd
-<LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_s
+<LI><a href="#[1c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -394,21 +406,21 @@ Global Symbols
 <LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TOPIC
 <LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ENTER_PASS
 <LI><a href="#[2e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GET_PASS
-<LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;COMPARE_PASS
+<LI><a href="#[2c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;COMPARE_PASS
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> rtentry2.o(.ARM.Collect$$rtentry$$0000000D)
 </UL>
-<P><STRONG><a name="[2c]"></a>strcmp</STRONG> (ARM, 156 bytes, Stack size 4 bytes, strcmp.o(.text))
+<P><STRONG><a name="[2d]"></a>strcmp</STRONG> (ARM, 156 bytes, Stack size 4 bytes, strcmp.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = strcmp
 </UL>
-<BR>[Called By]<UL><LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;COMPARE_PASS
+<BR>[Called By]<UL><LI><a href="#[2c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;COMPARE_PASS
 </UL>
 
-<P><STRONG><a name="[59]"></a>__use_two_region_memory</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
+<P><STRONG><a name="[5a]"></a>__use_two_region_memory</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
 
-<P><STRONG><a name="[5a]"></a>__rt_heap_escrow$2region</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
+<P><STRONG><a name="[5b]"></a>__rt_heap_escrow$2region</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
 
-<P><STRONG><a name="[5b]"></a>__rt_heap_expand$2region</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
+<P><STRONG><a name="[5c]"></a>__rt_heap_expand$2region</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
 
 <P><STRONG><a name="[13]"></a>__user_setup_stackheap</STRONG> (ARM, 96 bytes, Stack size 8 bytes, sys_stackheap_outer.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8 + Unknown Stack Size
@@ -427,13 +439,13 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[15]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_entry_main
 </UL>
 
-<P><STRONG><a name="[5c]"></a>__user_libspace</STRONG> (ARM, 12 bytes, Stack size 0 bytes, libspace.o(.text), UNUSED)
+<P><STRONG><a name="[5d]"></a>__user_libspace</STRONG> (ARM, 12 bytes, Stack size 0 bytes, libspace.o(.text), UNUSED)
 
 <P><STRONG><a name="[34]"></a>__user_perproc_libspace</STRONG> (ARM, 0 bytes, Stack size 0 bytes, libspace.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[13]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__user_setup_stackheap
 </UL>
 
-<P><STRONG><a name="[5d]"></a>__user_perthread_libspace</STRONG> (ARM, 0 bytes, Stack size 0 bytes, libspace.o(.text), UNUSED)
+<P><STRONG><a name="[5e]"></a>__user_perthread_libspace</STRONG> (ARM, 0 bytes, Stack size 0 bytes, libspace.o(.text), UNUSED)
 
 <P><STRONG><a name="[38]"></a>__rt_fp_status_addr</STRONG> (ARM, 12 bytes, Stack size 0 bytes, rt_fp_status_addr_intlibspace.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[11]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_fp_init
@@ -443,11 +455,11 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[19]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_exit_exit (via Veneer)
 </UL>
 
-<P><STRONG><a name="[5e]"></a>__I$use$semihosting</STRONG> (ARM, 0 bytes, Stack size 0 bytes, use_no_semi.o(.text), UNUSED)
+<P><STRONG><a name="[5f]"></a>__I$use$semihosting</STRONG> (ARM, 0 bytes, Stack size 0 bytes, use_no_semi.o(.text), UNUSED)
 
-<P><STRONG><a name="[5f]"></a>__use_no_semihosting_swi</STRONG> (ARM, 4 bytes, Stack size 0 bytes, use_no_semi.o(.text), UNUSED)
+<P><STRONG><a name="[60]"></a>__use_no_semihosting_swi</STRONG> (ARM, 4 bytes, Stack size 0 bytes, use_no_semi.o(.text), UNUSED)
 
-<P><STRONG><a name="[60]"></a>__semihosting_library_function</STRONG> (ARM, 0 bytes, Stack size unknown bytes, indicate_semi.o(.text), UNUSED)
+<P><STRONG><a name="[61]"></a>__semihosting_library_function</STRONG> (ARM, 0 bytes, Stack size unknown bytes, indicate_semi.o(.text), UNUSED)
 
 <P><STRONG><a name="[11]"></a>_fp_init</STRONG> (ARM, 24 bytes, Stack size 8 bytes, fpinit.o(x$fpl$fpinit))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = _fp_init
@@ -456,8 +468,9 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[10]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_lib_init (via Veneer)
 </UL>
-
-<P><STRONG><a name="[61]"></a>__fplib_config_pureend_doubles</STRONG> (ARM, 0 bytes, Stack size unknown bytes, fpinit.o(x$fpl$fpinit), UNUSED)
+<BR>[Address Reference Count : 1]<UL><LI> main.o(.text)
+</UL>
+<P><STRONG><a name="[62]"></a>__fplib_config_pureend_doubles</STRONG> (ARM, 0 bytes, Stack size unknown bytes, fpinit.o(x$fpl$fpinit), UNUSED)
 <P>
 <H3>
 Local Symbols
