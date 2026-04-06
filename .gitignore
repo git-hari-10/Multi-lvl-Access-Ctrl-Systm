@@ -12,3 +12,6 @@ Listings/
 *.uvgui*
 *.uvopt*
 *.ini
+*.o
+*.d
+*.crf

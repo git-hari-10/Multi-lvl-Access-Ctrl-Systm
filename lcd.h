@@ -16,8 +16,8 @@ void lcd_init()
 {
 	IODIR0 |= D|RS|E;
 	lcd_cmd(0x02);
-	lcd_cmd(0x0C);
 	lcd_cmd(0x28);
+	lcd_cmd(0x0C);
 	lcd_cmd(0x01);
 }
 

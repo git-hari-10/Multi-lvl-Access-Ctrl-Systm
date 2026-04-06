@@ -11,7 +11,7 @@
 ### ADS-LD Output File: 'Security_System.axf'
 ### ADS-LD Command File: 'Security_System.lnp'
 ### Checking for dirty Components...
-### Creating CmdFile 'Security_System.lnp', Handle=0x00000788
+### Creating CmdFile 'Security_System.lnp', Handle=0x000010CC
 ### Writing '.lnp' file
 ### ADS-LD Command file 'Security_System.lnp' is ready.
 ### ADS-LD: About to start ADS-LD Thread.
