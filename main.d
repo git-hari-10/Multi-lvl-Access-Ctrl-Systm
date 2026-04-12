@@ -2,6 +2,7 @@ main.o: main.c
 main.o: C:\Keil\ARM\Inc\Philips\lpc21xx.h
 main.o: main_operation.h
 main.o: C:\Keil\ARM\RV31\Inc\string.h
+main.o: C:\Keil\ARM\RV31\Inc\stdlib.h
 main.o: lcd.h
 main.o: datatypes.h
 main.o: delay.h

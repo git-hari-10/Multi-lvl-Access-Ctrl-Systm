@@ -5,8 +5,8 @@ void I2C_init()
 {
 	PINSEL0  |= 0x50;        // Configure p0.2 as SCL & p0.3 as SDA
 	I2SCLL    = VAL;
-	I2SCLH    = VAL;          // Configure speed as 100 Kbps
-	I2CONSET  = 1<<I2EN_BIT;  // Enable I2C 
+	I2SCLH    = VAL;         // Configure speed as 100 Kbps
+	I2CONSET  = 1<<I2EN_BIT; // Enable I2C 
 }
 
 void I2C_St()              // START CONDITION
