@@ -90,7 +90,8 @@ void TOPIC()
 
 void SYSTEM()
 {
-	u8 otp[5];
+	i32 i;
+	u8 st,end,otp[5];
 	
 	ENTER_PASS();
 	GET_PASS();
@@ -127,16 +128,20 @@ void SYSTEM()
 		if(attempts >= 3)
 		{
 				lcd_cmd(0x01);
-			  lcd_cmd(0xC0);lcd_str("  TOO MANY ATTEMPTS ");
+			  lcd_cmd(0xC0);lcd_str(" TOO MANY ATTEMPTS ");
 				delay_ms(1000);
 			
 			  IOSET0 = BUZZ;
 		
 				lcd_cmd(0x01);
-				lcd_cmd(0x80);lcd_str(" ****************** ");
-				lcd_cmd(0xC0);lcd_str("       SYSTEM       ");
-				lcd_cmd(0x94);lcd_str("       LOCKED       ");
-				lcd_cmd(0xD4);lcd_str(" ****************** ");
+				lcd_cmd(0xC0);lcd_str("    SYSTEM  -       ");
+				lcd_cmd(0x94);lcd_str("      -  LOCKED     ");
+				for(i=0, st=0x80, end=0xE7; i<20; i++)
+				{
+					lcd_cmd(st++);lcd_write('#');
+					lcd_cmd(end--);lcd_write('#');
+					delay_ms(90);
+				}
 
 				while(1);   // permanent lock
 		}
@@ -158,7 +163,7 @@ void GENERATE_OTP()
 
 void ENTER_OTP(u8 *p)
 {
-	i32 i, addr;
+	i32 i,addr;
 	u8 st,end;
 
 	GENERATE_OTP();
@@ -186,9 +191,9 @@ re_enter:
 		lcd_cmd(0x94);lcd_str("      UNLOCKED      ");
 		for(i=0, st=0x80, end=0xE7; i<20; i++)
 		{
-			lcd_cmd(st++);lcd_write('*');
-			lcd_cmd(end--);lcd_write('*');
-			delay_ms(200);
+			lcd_cmd(st++);lcd_write('>');
+			lcd_cmd(end--);lcd_write('<');
+			delay_ms(90);
 		}
 		
 		// Doors opening (MOTOR)
@@ -219,7 +224,7 @@ re_enter:
 			
 			lcd_cmd(0x01);
 			lcd_cmd(0x80);lcd_str(" ================== ");
-			lcd_cmd(0xC0);lcd_str("  RETRY OTP FAILED  ");
+			lcd_cmd(0xC0);lcd_str("     OTP FAILED     ");
 			lcd_cmd(0xD4);lcd_str(" ================== ");
 			lcd_cmd(0x94);lcd_str("    REBOOTING");
 			lcd_write('.');delay_ms(500);lcd_write('.');delay_ms(500);lcd_write('.');delay_ms(500);lcd_write('.');delay_ms(100);
@@ -239,6 +244,7 @@ re_enter:
 			delay_ms(1200);lcd_cmd(0x01);
 			
 			otp = (T1TC % 8000) + 2000;
+			
 			lcd_cmd(0x01);
 			lcd_cmd(0x80);lcd_str(" ------------------ ");
 			lcd_cmd(0xC0);lcd_str("     RETRY OTP      ");

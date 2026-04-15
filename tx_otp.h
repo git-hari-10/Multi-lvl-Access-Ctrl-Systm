@@ -2,7 +2,6 @@
 
 void UART0_init(void);
 void TxD(u8);
-u8 RxD(void);
 void Tx_str(u8*);
 void send_sms(i32);
 void send_unauthorized_sms(void);
@@ -26,12 +25,6 @@ void Tx_str(u8 *s)
 {
 	while(*s)
 		TxD(*s++);
-}
-
-u8 RxD()
-{
-	while(!(U0LSR&1));
-	return U0RBR;
 }
 
 void send_sms(i32 otp)
