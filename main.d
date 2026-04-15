@@ -10,3 +10,4 @@ main.o: i2c_operation.h
 main.o: i2c_internal.h
 main.o: reg_macro.h
 main.o: keypad.h
+main.o: tx_otp.h

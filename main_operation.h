@@ -3,9 +3,16 @@
 #include "lcd.h"
 #include "i2c_operation.h"
 #include "keypad.h"
+#include "tx_otp.h"
 
-#define SW 14
+#define SW   14
+#define IN1  1<<21
+#define IN2  1<<22
+#define IN3  1<<23
+#define IN4  1<<24
+#define BUZZ 1<<25
 
+u8 otp_check = 0;
 i32 attempts = 0;
 i32 otp = 0;
 u8 p[10];						// PASSWORD STORAGE
@@ -16,7 +23,7 @@ void TOPIC(void);
 void STORE_PASS(u8*);
 void GET_PASS(void);
 void ENTER_PASS(void);
-void COMPARE_PASS(void);
+void SYSTEM(void);
 void ENTER_OTP(u8*);
 void GENERATE_OTP(void);
 
@@ -24,6 +31,8 @@ void GENERATE_OTP(void);
 
 void INIT_FUNC()
 {
+	IODIR0 |= IN1|IN2|IN3|IN4|BUZZ;
+	UART0_init();
 	lcd_init();
 	I2C_init();
 }
@@ -49,10 +58,10 @@ void ENTER_PASS()
 {
 	i32 i,addr;
 	lcd_cmd(0x01);
-	lcd_cmd(0x80);lcd_str("====================");
+	lcd_cmd(0x80);lcd_str(" ------------------ ");
 	lcd_cmd(0xC0);lcd_str("   ENTER PASSWORD   ");
-	lcd_cmd(0xD4);lcd_str("====================");
-	for(i=0,addr=0x99;i<4;i++)
+	lcd_cmd(0xD4);lcd_str(" ------------------ ");
+	for(i=0,addr=0x98;i<4;i++)
 	{
 		e[i] = keypress();
 		lcd_cmd(addr+=2);lcd_write('*');
@@ -77,20 +86,24 @@ void TOPIC()
 	}
 }
 
-/* ----- COMPARE PASSWORD ----- */
+/* ----- SECURE SYSTEM  ----- */
 
-void COMPARE_PASS()
+void SYSTEM()
 {
 	u8 otp[5];
+	
+	ENTER_PASS();
+	GET_PASS();
+	
 	if(!strcmp((char *)p,(char *)e))
 	{
 		attempts = 0;
 		lcd_cmd(0x01);
-		lcd_cmd(0x80);lcd_str("  (^_^) ACCESS OK!  ");
-		lcd_cmd(0xC0);lcd_str(" ------------------ ");
+		lcd_cmd(0x80);lcd_str(" (^_^) ACCESS OK!!! ");
+		lcd_cmd(0xC0);lcd_str(" ================== ");
 		lcd_cmd(0x94);lcd_str("   PRESS ~ BUTTON   ");
 		lcd_cmd(0xD4);lcd_str("    GENERATE OTP    ");
-		//delay_ms(2000);
+
 		ENTER_OTP(otp);
 	}
 	else
@@ -98,21 +111,27 @@ void COMPARE_PASS()
 		attempts++;
 		
 		lcd_cmd(0x01);
-		lcd_cmd(0x80);lcd_str("====================");
+		lcd_cmd(0x80);lcd_str(" ================== ");
 		lcd_cmd(0xC0);lcd_str("      IN-VALID      ");
 		lcd_cmd(0x94);lcd_str("      PASSWORD      ");
-		lcd_cmd(0xD4);lcd_str("====================");
+		lcd_cmd(0xD4);lcd_str(" ================== ");
 		
-		delay_ms(1200);lcd_cmd(0x01);
+		delay_ms(1000);lcd_cmd(0x01);
 		
 		lcd_cmd(0xC0);lcd_str("   ATTEMPTS LEFT:   ");
 		lcd_cmd(0x9D);lcd_write('0');lcd_write('0' + (3 - attempts));  
 
-		delay_ms(1200);
+		delay_ms(1000);
 
 		// LOCK CONDITION
 		if(attempts >= 3)
 		{
+				lcd_cmd(0x01);
+			  lcd_cmd(0xC0);lcd_str("  TOO MANY ATTEMPTS ");
+				delay_ms(1000);
+			
+			  IOSET0 = BUZZ;
+		
 				lcd_cmd(0x01);
 				lcd_cmd(0x80);lcd_str(" ****************** ");
 				lcd_cmd(0xC0);lcd_str("       SYSTEM       ");
@@ -135,24 +154,23 @@ void GENERATE_OTP()
 	otp = (T1TC % 8000) + 2000;  
 
 	while(((IOPIN0>>SW)&1)==0);   
-
-	T1TCR = 0x03;
-	T1TCR = 0x00;
 }
 
 void ENTER_OTP(u8 *p)
 {
 	i32 i, addr;
+	u8 st,end;
 
 	GENERATE_OTP();
-	// Here comes UART
-
 	lcd_cmd(0x01);
 	lcd_cmd(0x80);lcd_str(" ------------------ ");
 	lcd_cmd(0xC0);lcd_str("     ENTER OTP      ");
 	lcd_cmd(0xD4);lcd_str(" ------------------ ");
 	lcd_cmd(0x94);
-
+	send_sms(otp);
+	
+re_enter:
+	
 	for(i=0,addr=0x98;i<4;i++)
 	{
 		p[i] = keypress();
@@ -164,14 +182,78 @@ void ENTER_OTP(u8 *p)
 	if((p[0]-48)*1000 + (p[1]-48)*100 + (p[2]-48)*10 + (p[3]-48) == otp)
 	{
 		lcd_cmd(0x01);
-		lcd_str("ACCESS GRANTED");
+		lcd_cmd(0xC0);lcd_str("       SYSTEM       ");
+		lcd_cmd(0x94);lcd_str("      UNLOCKED      ");
+		for(i=0, st=0x80, end=0xE7; i<20; i++)
+		{
+			lcd_cmd(st++);lcd_write('*');
+			lcd_cmd(end--);lcd_write('*');
+			delay_ms(200);
+		}
+		
+		// Doors opening (MOTOR)
+		
+		// motor-1 on
+		IOSET0 = IN1;
+		IOCLR0 = IN2;
+		// motor-2 on
+		IOCLR0 = IN3;
+		IOSET0 = IN4;
+		
+		delay_ms(5000);
+		
+		// motor-1 off
+		IOCLR0 = IN1;
+		IOCLR0 = IN2;
+		// motor -2 off
+		IOCLR0 = IN3;
+		IOCLR0 = IN4;
+		
+		while(1);
 	}
 	else
 	{
-		lcd_cmd(0x01);
-		lcd_str("WRONG OTP");
+		if(otp_check == 1)
+		{
+			otp_check = 0;
+			
+			lcd_cmd(0x01);
+			lcd_cmd(0x80);lcd_str(" ================== ");
+			lcd_cmd(0xC0);lcd_str("  RETRY OTP FAILED  ");
+			lcd_cmd(0xD4);lcd_str(" ================== ");
+			lcd_cmd(0x94);lcd_str("    REBOOTING");
+			lcd_write('.');delay_ms(500);lcd_write('.');delay_ms(500);lcd_write('.');delay_ms(500);lcd_write('.');delay_ms(100);
+			
+			send_unauthorized_sms();
+	
+			SYSTEM();
+		}
+		else
+		{
+			lcd_cmd(0x01);
+			lcd_cmd(0x80);lcd_str(" ================== ");
+			lcd_cmd(0xC0);lcd_str("      IN-VALID      ");
+			lcd_cmd(0x94);lcd_str("         OTP        ");
+			lcd_cmd(0xD4);lcd_str(" ================== ");
+			
+			delay_ms(1200);lcd_cmd(0x01);
+			
+			otp = (T1TC % 8000) + 2000;
+			lcd_cmd(0x01);
+			lcd_cmd(0x80);lcd_str(" ------------------ ");
+			lcd_cmd(0xC0);lcd_str("     RETRY OTP      ");
+			lcd_cmd(0xD4);lcd_str(" ------------------ ");
+			lcd_cmd(0x94);otp_check = 1;
+			send_sms(otp);
+			
+			T0TCR = 0x03;
+			T0TCR = 0x00;
+			
+			goto re_enter;
+		}
 	}
-
-	while(1);
 }
+
+
+
 

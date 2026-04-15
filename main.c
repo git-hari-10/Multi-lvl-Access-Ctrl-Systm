@@ -9,8 +9,6 @@ int main()
 
   while(1)
   {
-    ENTER_PASS();
-    GET_PASS();
-    COMPARE_PASS();
+    SYSTEM();
   }
 }
