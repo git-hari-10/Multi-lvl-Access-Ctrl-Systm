@@ -9,9 +9,18 @@ Listings/
 *.lst
 *.bak
 *.dep
+*.crf
+
+# Object & dependency files
+*.o
+*.d
+
+# Keil intermediate files
+*.i     # Preprocessed C file
+*.s     # Assembly output
+*.tra   # Trace file
+
+# Keil project user-specific files
 *.uvgui*
 *.uvopt*
 *.ini
-*.o
-*.d
-*.crf
