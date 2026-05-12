@@ -4,7 +4,7 @@
 int main()
 {		
 	INIT_FUNC();   	
-  STORE_PASS("2004");
+    STORE_PASS("2004");
 	TOPIC();
 
   while(1)
